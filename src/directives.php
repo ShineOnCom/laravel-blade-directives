@@ -44,6 +44,28 @@ return [
 
     /*
     |---------------------------------------------------------------------
+    | @isnull / @isnotnull
+    |---------------------------------------------------------------------
+    */
+
+    'isnull' => function ($expression) {
+        return "<?php if (is_null({$expression})) : ?>";
+    },
+
+    'endisnull' => function ($expression) {
+        return '<?php endif; ?>';
+    },
+
+    'isnotnull' => function ($expression) {
+        return "<?php if (! is_null({$expression})) : ?>";
+    },
+
+    'endisnotnull' => function ($expression) {
+        return '<?php endif; ?>';
+    },
+
+    /*
+    |---------------------------------------------------------------------
     | @mix
     |---------------------------------------------------------------------
     */
@@ -212,7 +234,7 @@ return [
     'pushonce' => function ($expression) {
         list($pushName, $pushSub) = explode(':', trim(substr($expression, 1, -1)));
 
-        $key = '__pushonce_'.$pushName.'_'.$pushSub;
+        $key = '__pushonce_'.$pushName.'_'.str_replace('-', '_', $pushSub);
 
         return "<?php if(! isset(\$__env->{$key})): \$__env->{$key} = 1; \$__env->startPush('{$pushName}'); ?>";
     },
